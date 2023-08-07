@@ -5,12 +5,24 @@ const NoteForm = ({ addNote, darkMode }) => {
     // usiamo useState hook per creare variabili "title" e "content"
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     // questa funzione viene richiamata quando il form viene submittato
     // è anche responsabile della creazione di nuove note
     const handleSubmit = (e) => {
         // previene aggiornamento della pagina della form submission
         e.preventDefault();
+
+
+        // controlla se titolo e contenuto sono vuoti o solo spazi
+        if (!title.trim() || !content.trim()) {
+            setErrorMessage('Please fill in both the title and content.');
+            return;
+        }
+
+        // se la validazione passa resetta il messaggio di errore
+        setErrorMessage('');
+
         // titolo e contenuto vengono impostati a stringhe vuote
         addNote(title, content);
         setTitle('');
@@ -44,7 +56,9 @@ const NoteForm = ({ addNote, darkMode }) => {
                         className="w-full p-2 border dark:bg-gray-700 dark:border-gray-400 rounded"
                     />
                 </div>
-
+                <center>
+                    {errorMessage ? <p className="text-red-400 fw-700 my-3">{errorMessage}</p> : null}
+                </center>
                 <div className="flex items-center justify-center">
                     <button type="submit" className="p-2 bg-blue-500 dark:bg-blue-300 dark:text-black text-white rounded">
                         Add Note
