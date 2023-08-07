@@ -4,8 +4,11 @@ import Note from "./components/Note";
 
 const App = () => {
 
-  // state per la darkmode
-  const [darkMode, setDarkMode] = useState(false);
+  // state per la darkmode nel localStorage
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedDarkMode = localStorage.getItem('dark-mode');
+    return savedDarkMode ? JSON.parse(savedDarkMode) : false;
+  });
 
   // useEffect per la darkMode
   useEffect(() => {
@@ -40,10 +43,12 @@ const App = () => {
     setNotes(notes.map((note) => note.id === id ? updatedNote : note));
   };
 
-  //funzione per la darkMode
+  //attiviamo darkMode persistente nel localStorage
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  }
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
+  };
 
 
   return (
