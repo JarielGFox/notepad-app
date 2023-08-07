@@ -16,18 +16,24 @@ const Note = ({ note, deleteNote, editNote }) => {
 
 
     return isEditing ? (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-            />
-            <button type="submit">Update Note</button>
-        </form>
+        <div className="flex items-center justify-center bg-gray-100">
+            <form onSubmit={handleSubmit} className="w-1/2 p-4 bg-white rounded shadow">
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2 mb-4 border rounded"
+                    placeholder="Note Title"
+                />
+                <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full p-2 mb-4 border rounded"
+                    placeholder="Note Content"
+                ></textarea>
+                <button type="submit" className=" bg-blue-500 text-white rounded">Update Note</button>
+            </form>
+        </div>
     ) : (
         <div>
             <h2>{note.title}</h2>
