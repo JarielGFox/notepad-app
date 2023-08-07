@@ -21,20 +21,39 @@ const App = () => {
     }
   }, [darkMode]);
 
-  // usiamo l'hook per creare una state variable per le note che parte come array vuoto
-  const [notes, setNotes] = useState([]);
+  // controlla se ci sono note salvate sotto la keyword notes nel localStorage
+  // se ci sono parsa la stringa JSON in un array JS e lo usa come stato iniziale, sennò array vuoto
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem('notes');
+    if (savedNotes) {
+      try {
+        return JSON.parse(savedNotes);
+      } catch (error) {
+        console.error("Error parsing notes from local storage:", error);
+        return [];
+      }
+    } else {
+      return [];
+    }
+  });
 
   // questa funzione crea una newNote e la aggiunge all'array, ogni nota è un oggetto con titolo, contenuto ed id
   // l'id che usiamo in questo caso è il timestamp
+  // salviamo le note nel localStorage con JSON.stringify()
   const addNote = (title, content, category) => {
     const newNote = { title, content, category, id: Date.now() };
     // creiamo un nuovo array che include le note esistenti + le nuove
-    setNotes([...notes, newNote]);
+    const updatedNotes = [...notes, newNote];
+    setNotes(updatedNotes);
+    // salviamo le note nel localStorage
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
   };
 
   // filtriamo l'array siccome lo stato è considerato immutabile, per tanto non va alterato
   const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
   }
 
   // usiamo map per creare un nuovo array e trasformiamo ogni elemento dell'array originale
@@ -42,7 +61,9 @@ const App = () => {
   const editNote = (id, updatedNote) => {
     // se l'id di "note" è lo stesso id che abbiamo passato ad editNote() sostituiamo "note" con "updatedNote"
     // se l'id di "note" NON è lo stesso che abbiamo passato ad editNote() lasciamo "note" unchanged
-    setNotes(notes.map((note) => note.id === id ? updatedNote : note));
+    const updatedNotes = notes.map((note) => note.id === id ? updatedNote : note);
+    setNotes(updatedNotes);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
   };
 
   //attiviamo darkMode persistente nel localStorage
