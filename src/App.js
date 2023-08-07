@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
+import lightbulb from '../src/lightbulb.png';
+
 
 const App = () => {
 
@@ -53,11 +55,14 @@ const App = () => {
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <h1 className="flex items-center justify-center font-bold text-black dark:text-white">Reactive Notes</h1>
+      {/* don't repeat yourself tua madre */}
+      <h1 className="mt-3 flex items-center justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
+      <div className="flex items-center justify-center">
+        <button className="my-3 cursor-pointer" onClick={toggleDarkMode}>
+          <img src={lightbulb} width={50} height={50} alt="DarkMode" title="Dark Mode" />
+        </button>
+      </div>
 
-      <button onClick={toggleDarkMode}>
-        Toggle Dark Mode
-      </button>
       {/* passiamo addNote come prop al componente NoteForm */}
       <NoteForm addNote={addNote} darkMode={darkMode} />
       {/* mappiamo notes e renderiamo un component Note per ogni nota mappata */}

@@ -21,7 +21,7 @@ const NoteForm = ({ addNote, darkMode }) => {
     // nel text input passiamo title, nella text-area invece content
     return (
         <div className="flex items-center justify-center">
-            <form onSubmit={handleSubmit} className={`bg-white dark:bg-gray-800 p-8 rounded shadow-md ${darkMode ? 'text-white' : 'text-black'}`}>
+            <form onSubmit={handleSubmit} className={`bg-white dark:bg-gray-800 font-mono p-8 rounded shadow-md ${darkMode ? 'text-white' : 'text-black'}`}>
                 <div className="mb-4">
                     <input
                         type="text"
@@ -36,7 +36,7 @@ const NoteForm = ({ addNote, darkMode }) => {
                     <textarea
                         name="notepad"
                         id="notepad"
-                        cols="30"
+                        cols="100"
                         rows="10"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
@@ -45,9 +45,11 @@ const NoteForm = ({ addNote, darkMode }) => {
                     />
                 </div>
 
-                <button type="submit" className="w-full p-2 bg-blue-500 dark:bg-blue-300 dark:text-black text-white rounded">
-                    Add Note
-                </button>
+                <div className="flex items-center justify-center">
+                    <button type="submit" className="p-2 bg-blue-500 dark:bg-blue-300 dark:text-black text-white rounded">
+                        Add Note
+                    </button>
+                </div>
             </form>
         </div>
     );
