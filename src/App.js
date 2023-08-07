@@ -58,7 +58,7 @@ const App = () => {
       {/* mappiamo notes e renderiamo un component Note per ogni nota mappata */}
       {notes.map((note) => (
         // passiamo note, deleteNote e editNote come prop al componente Note e usiamo l'id di note come chiave per il mapping
-        <Note key={note.id} note={note} deleteNote={deleteNote} editNote={editNote} />
+        <Note key={note.id} note={note} deleteNote={deleteNote} editNote={editNote} darkMode={darkMode} />
       ))}
     </div>
   );
