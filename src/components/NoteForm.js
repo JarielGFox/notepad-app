@@ -6,6 +6,7 @@ const NoteForm = ({ addNote, darkMode }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [category, setCategory] = useState('');
 
     // questa funzione viene richiamata quando il form viene submittato
     // è anche responsabile della creazione di nuove note
@@ -24,9 +25,10 @@ const NoteForm = ({ addNote, darkMode }) => {
         setErrorMessage('');
 
         // titolo e contenuto vengono impostati a stringhe vuote
-        addNote(title, content);
+        addNote(title, content, category);
         setTitle('');
         setContent('');
+        setCategory('');
     };
 
 
@@ -40,6 +42,16 @@ const NoteForm = ({ addNote, darkMode }) => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="note title"
+                        className="w-full p-2 border dark:bg-gray-700 dark:border-gray-400 rounded"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        placeholder="note category"
                         className="w-full p-2 border dark:bg-gray-700 dark:border-gray-400 rounded"
                     />
                 </div>

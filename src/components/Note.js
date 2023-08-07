@@ -6,6 +6,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [title, setTitle] = useState(note.title);
     const [content, setContent] = useState(note.content);
+    const [category, setCategory] = useState(note.category);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = (e) => {
@@ -21,7 +22,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
         setErrorMessage('');
 
         // aggiorna il contenuto delle note
-        editNote(note.id, { title, content, id: note.id });
+        editNote(note.id, { title, content, category, id: note.id });
         setIsEditing(false);
     }
 
@@ -35,6 +36,15 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
                     className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
                     placeholder="Note Title"
                 />
+
+                <input
+                    type="text"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
+                    placeholder="Note Category"
+                />
+
                 <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
@@ -53,6 +63,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
         <div className={`p-4 m-4 w-1/2 rounded shadow mx-auto font-mono ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
             <h2 className="font-bold">{note.title}</h2>
             <p className="mb-4">{note.content}</p>
+            <p className="text-sm text-gray-400 my-3">Category: {note.category}</p>
             <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
             <button onClick={() => setIsEditing(true)} className="bg-teal-400 text-gray-800 rounded p-1">Edit</button>
         </div>

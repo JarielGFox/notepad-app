@@ -26,8 +26,8 @@ const App = () => {
 
   // questa funzione crea una newNote e la aggiunge all'array, ogni nota è un oggetto con titolo, contenuto ed id
   // l'id che usiamo in questo caso è il timestamp
-  const addNote = (title, content) => {
-    const newNote = { title, content, id: Date.now() };
+  const addNote = (title, content, category) => {
+    const newNote = { title, content, category, id: Date.now() };
     // creiamo un nuovo array che include le note esistenti + le nuove
     setNotes([...notes, newNote]);
   };
