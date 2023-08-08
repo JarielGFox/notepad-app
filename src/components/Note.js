@@ -2,12 +2,19 @@ import { useState } from "react";
 
 // queste sono le props che passiamo al componente
 const Note = ({ note, deleteNote, editNote, darkMode }) => {
-    // stati per l'editing delle note
+
+    // stato per l'editing delle note
     const [isEditing, setIsEditing] = useState(false);
+    // stati per il contenuto delle note
     const [title, setTitle] = useState(note.title);
     const [content, setContent] = useState(note.content);
     const [category, setCategory] = useState(note.category);
+
+    // gestisce l'errore nel caso la nota è vuota
     const [errorMessage, setErrorMessage] = useState('');
+
+    //stato per vedere le note espanse
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -62,7 +69,10 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     ) : (
         <div className={`p-4 m-4 w-1/2 rounded shadow mx-auto font-mono ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
             <h2 className="font-bold">{note.title}</h2>
-            <p className="mb-4">{note.content}</p>
+            {/* ritorniamo una nuova stringa con substring(), se nota è più lunga di 100 chars, mostra i puntini */}
+            <p onClick={() => setIsExpanded(!isExpanded)} className="mb-4 cursor-pointer">
+                {isExpanded ? note.content : note.content.substring(0, 100)}{note.content.length > 100 ? "..." : ""}
+            </p>
             <p className="text-sm text-gray-400 my-3">Category: {note.category}</p>
             <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
             <button onClick={() => setIsEditing(true)} className="bg-teal-400 text-gray-800 rounded p-1">Edit</button>
