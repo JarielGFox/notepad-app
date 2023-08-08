@@ -69,8 +69,9 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     ) : (
         <div className={`p-4 m-4 w-1/2 rounded shadow mx-auto font-mono ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
             <h2 className="font-bold">{note.title}</h2>
-            {/* ritorniamo una nuova stringa con substring(), se nota è più lunga di 100 chars, mostra i puntini */}
+            {/* se isExpanded è true, mostra tutto il contenuto della nota, se false invece solo i primi 100 chars */}
             <p onClick={() => setIsExpanded(!isExpanded)} className="mb-4 cursor-pointer">
+                {/* ritorniamo una nuova stringa con substring(), se nota è più lunga di 100 chars, mostra i puntini */}
                 {isExpanded ? note.content : note.content.substring(0, 100)}{note.content.length > 100 ? "..." : ""}
             </p>
             <p className="text-sm text-gray-400 my-3">Category: {note.category}</p>
