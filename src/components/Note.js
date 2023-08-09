@@ -37,7 +37,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     }
 
     return isEditing ? (
-        <div className={`flex items-center justify-center font-mono ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <div className={`mt-1 flex items-center justify-center font-mono ${darkMode ? '' : 'bg-gray-100'}`}>
             <form onSubmit={handleSubmit} className={`w-1/2 p-4 ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded shadow`}>
                 <input
                     type="text"
