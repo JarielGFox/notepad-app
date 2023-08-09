@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
 import lightbulb from '../src/lightbulb.png';
+import exportlogo from '../src/exportlogo.png';
+import importlogo from '../src/importlogo.png';
 
 
 const App = () => {
@@ -89,9 +91,44 @@ const App = () => {
     localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
   };
 
+  // funzionalità per esportare le note
+  const handleExportNotes = () => {
+    //convertiamo le note in JSON
+    const notesJSON = JSON.stringify(notes);
+
+    //creiamo un file di raw data Binary Large OBject dalla stringa JSON
+    const blob = new Blob([notesJSON], { type: 'application/json' });
+
+    //creiamo un URL per il Blob
+    const urlBlob = URL.createObjectURL(blob);
+
+    //creiamo un anchor temporaneo
+    const tempA = document.createElement('a')
+    tempA.href = urlBlob;
+    tempA.download = 'notes_backup.json'; //nome del file di download
+
+    //aggiungiamo l'anchor al documento, triggera un click per il download e poi lo rimuoviamo
+    document.body.appendChild(tempA);
+    tempA.click();
+    document.body.removeChild(tempA);
+
+    // puliamo revocando l'url del BLOB
+    URL.revokeObjectURL(urlBlob);
+  }
+
+  //funzionalità di import delle note
+  const handleImportNotes = (event) => {
+
+    const file = event.target.files[0];
+  };
+
+  // per cliccare l'elemento input nascosto
+  const triggerFileInput = () => {
+    document.getElementById('fileInput').click();
+  };
+
   // stato per funzionalità sort
   const [sortType, setSortType] = useState('creation');
-
   // funzione per il sort
   const getSortedNotes = () => {
     // creiamo una copia di notes che abbiamo passato come prop per non modificare lo stato originale
@@ -114,15 +151,27 @@ const App = () => {
     return sortedNotes;
   }
 
-
   return (
     <div className={darkMode ? 'dark' : ''}>
       {/* don't repeat yourself tua madre */}
-      <h1 className="mt-3 flex items-center justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
+      <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
       <div className="flex items-center justify-center">
-        <button className="my-3 cursor-pointer" onClick={toggleDarkMode}>
-          <img src={lightbulb} width={50} height={50} alt="DarkMode" title="Dark Mode" />
+        <button className="my-3 me-3 cursor-pointer" onClick={toggleDarkMode}>
+          <img src={lightbulb} width={40} height={40} alt="DarkMode" title="Dark Mode" />
         </button>
+        <button className="my-3 me-3 cursor-pointer">
+          <img src={importlogo} width={40} height={40} onClick={triggerFileInput} alt="Import Notes" title="Import Notes" />
+        </button>
+        <button className="my-3 cursor-pointer" onClick={handleExportNotes}>
+          <img src={exportlogo} width={40} height={40} alt="Export Notes" title="Export Notes" />
+        </button>
+
+        <input
+          type="file"
+          id="fileInput"
+          className="hidden"
+          onChange={handleImportNotes}
+        />
       </div>
 
       <div>
