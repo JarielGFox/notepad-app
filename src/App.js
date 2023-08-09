@@ -41,7 +41,14 @@ const App = () => {
   // l'id che usiamo in questo caso è il timestamp
   // salviamo le note nel localStorage con JSON.stringify()
   const addNote = (title, content, category) => {
-    const newNote = { title, content, category, id: Date.now() };
+    const newNote = {
+      title,
+      content,
+      category,
+      id: Date.now(),
+      createdAt: new Date().toISOString(),
+      lastEditedAt: new Date().toISOString(),
+    };
     // creiamo un nuovo array che include le note esistenti + le nuove
     const updatedNotes = [...notes, newNote];
     setNotes(updatedNotes);
@@ -61,7 +68,16 @@ const App = () => {
   const editNote = (id, updatedNote) => {
     // se l'id di "note" è lo stesso id che abbiamo passato ad editNote() sostituiamo "note" con "updatedNote"
     // se l'id di "note" NON è lo stesso che abbiamo passato ad editNote() lasciamo "note" unchanged
-    const updatedNotes = notes.map((note) => note.id === id ? updatedNote : note);
+    const updatedNotes = notes.map((note) => {
+      if (note.id === id) {
+        return {
+          ...updatedNote,
+          createdAt: note.createdAt,
+          lastEditedAt: new Date().toISOString()
+        };
+      }
+      return note;
+    });
     setNotes(updatedNotes);
     localStorage.setItem('notes', JSON.stringify(updatedNotes));
   };

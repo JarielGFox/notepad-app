@@ -84,6 +84,12 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
                 {isExpanded ? note.content : note.content.substring(0, 100)}{note.content.length > 100 ? "..." : ""}
             </p>
             <p className={`text-sm my-3 ${darkMode ? 'text-gray-400' : 'bg-white text-black'}`} >Category: {note.category}</p>
+
+            {/* Mostriamo la data di creazione e l'ultima data di modifica */}
+
+            <p className={`text-sm ${darkMode ? 'text-teal-200' : 'bg-white text-black'}`}>Created At: {new Date(note.createdAt).toLocaleDateString()} {new Date(note.createdAt).toLocaleTimeString()}</p>
+            <p className={`text-sm ${darkMode ? 'text-teal-200' : 'bg-white text-black'}`}>Last Edited: {new Date(note.lastEditedAt).toLocaleDateString()} {new Date(note.lastEditedAt).toLocaleTimeString()}</p>
+
             <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
             <button onClick={() => {
                 setIsEditing(true);

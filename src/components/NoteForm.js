@@ -32,6 +32,7 @@ const NoteForm = ({ addNote, darkMode }) => {
         setTitle('');
         setContent('');
         setCategory('');
+        setCharCount(0);
     };
 
 
@@ -81,7 +82,9 @@ const NoteForm = ({ addNote, darkMode }) => {
                     {errorMessage ? <p className="text-red-400 fw-700 my-3">{errorMessage}</p> : null}
                 </center>
                 <div className="flex items-center justify-center">
-                    <button type="submit" className="p-2 bg-blue-500 dark:bg-blue-300 dark:text-black text-white rounded">
+                    <button
+                        type="submit"
+                        className="p-2 bg-blue-500 dark:bg-blue-300 dark:text-black text-white rounded">
                         Add Note
                     </button>
                 </div>
