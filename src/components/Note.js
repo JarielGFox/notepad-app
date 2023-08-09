@@ -51,7 +51,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
                     type="text"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
+                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded`}
                     placeholder="Note Category"
                 />
 
@@ -83,7 +83,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
                 {/* ritorniamo una nuova stringa con substring(), se nota è più lunga di 100 chars, mostra i puntini */}
                 {isExpanded ? note.content : note.content.substring(0, 100)}{note.content.length > 100 ? "..." : ""}
             </p>
-            <p className="text-sm text-gray-400 my-3">Category: {note.category}</p>
+            <p className={`text-sm my-3 ${darkMode ? 'text-gray-400' : 'bg-white text-black'}`} >Category: {note.category}</p>
             <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
             <button onClick={() => {
                 setIsEditing(true);
