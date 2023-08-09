@@ -16,7 +16,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     // gestisce l'errore nel caso la nota è vuota
     const [errorMessage, setErrorMessage] = useState('');
 
-    //stato per vedere le note espanse
+    // stato per vedere le note espanse
     const [isExpanded, setIsExpanded] = useState(false);
 
     const handleSubmit = (e) => {

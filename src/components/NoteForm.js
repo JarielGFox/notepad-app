@@ -44,6 +44,7 @@ const NoteForm = ({ addNote, darkMode }) => {
                     <p className="mb-2 text-center">
                         Characters: {charCount}
                     </p>
+
                     <input
                         type="text"
                         value={title}

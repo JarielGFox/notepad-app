@@ -89,6 +89,31 @@ const App = () => {
     localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
   };
 
+  // stato per funzionalità sort
+  const [sortType, setSortType] = useState('creation');
+
+  // funzione per il sort
+  const getSortedNotes = () => {
+    // creiamo una copia di notes che abbiamo passato come prop per non modificare lo stato originale
+    let sortedNotes = [...notes];
+
+    switch (sortType) {
+      case 'alphabetical':
+        sortedNotes.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'creation':
+        sortedNotes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
+      case 'edited':
+        sortedNotes.sort((b, a) => new Date(a.lastEditedAt) - new Date(b.lastEditedAt));
+        break;
+      default:
+        break;
+    }
+
+    return sortedNotes;
+  }
+
 
   return (
     <div className={darkMode ? 'dark' : ''}>
@@ -100,10 +125,24 @@ const App = () => {
         </button>
       </div>
 
+      <div>
+        <label for="sorting" className="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order your notes by:</label>
+        <select
+          id="sorting"
+          value={sortType}
+          onChange={(e) => setSortType(e.target.value)}
+          className="block mx-auto w-1/2 p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option value="alphabetical">Alphabetical</option>
+          <option value="creation">Creation Date</option>
+          <option value="edited">Last Edited</option>
+        </select>
+      </div>
+
       {/* passiamo addNote come prop al componente NoteForm */}
       <NoteForm addNote={addNote} darkMode={darkMode} />
       {/* mappiamo notes e renderiamo un component Note per ogni nota mappata */}
-      {notes.map((note) => (
+      {getSortedNotes().map((note) => (
         // passiamo note, deleteNote e editNote come prop al componente Note e usiamo l'id di note come chiave per il mapping
         <Note key={note.id} note={note} deleteNote={deleteNote} editNote={editNote} darkMode={darkMode} />
       ))}
