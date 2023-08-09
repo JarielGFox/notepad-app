@@ -68,7 +68,7 @@ const NoteForm = ({ addNote, darkMode }) => {
                         name="notepad"
                         id="notepad"
                         cols="100"
-                        rows="10"
+                        rows="9"
                         value={content}
                         onChange={(e) => {
                             setContent(e.target.value);
