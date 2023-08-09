@@ -10,6 +10,9 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     const [content, setContent] = useState(note.content);
     const [category, setCategory] = useState(note.category);
 
+    // stato per il character counter
+    const [charCount, setCharCount] = useState(0);
+
     // gestisce l'errore nel caso la nota è vuota
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -54,13 +57,19 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
 
                 <textarea
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => {
+                        setContent(e.target.value);
+                        setCharCount(e.target.value.length);
+                    }}
                     className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
                     placeholder="Note Content"
                 ></textarea>
                 <center>
                     {errorMessage ? <p className="text-red-500 fw-700 my-3">{errorMessage}</p> : null}
                 </center>
+                <p className="mb-2 text-center">
+                    Characters: {charCount}
+                </p>
                 <div className="flex items-center justify-center">
                     <button type="submit" className={`bg-blue-500 font-mono ${darkMode ? 'dark:bg-blue-300 dark:text-black' : 'text-white'} rounded`}>Update Note</button>
                 </div>
@@ -76,7 +85,10 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
             </p>
             <p className="text-sm text-gray-400 my-3">Category: {note.category}</p>
             <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
-            <button onClick={() => setIsEditing(true)} className="bg-teal-400 text-gray-800 rounded p-1">Edit</button>
+            <button onClick={() => {
+                setIsEditing(true);
+                setCharCount(note.content.length);
+            }} className="bg-teal-400 text-gray-800 rounded p-1">Edit</button>
         </div>
     );
 };

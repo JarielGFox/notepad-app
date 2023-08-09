@@ -8,6 +8,9 @@ const NoteForm = ({ addNote, darkMode }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [category, setCategory] = useState('');
 
+    // stato per la conta dei caratteri
+    const [charCount, setCharCount] = useState(0);
+
     // questa funzione viene richiamata quando il form viene submittato
     // è anche responsabile della creazione di nuove note
     const handleSubmit = (e) => {
@@ -36,7 +39,10 @@ const NoteForm = ({ addNote, darkMode }) => {
     return (
         <div className="flex items-center justify-center">
             <form onSubmit={handleSubmit} className={`bg-white dark:bg-gray-800 font-mono p-8 rounded shadow-md ${darkMode ? 'text-white' : 'text-black'}`}>
-                <div className="mb-4">
+                <div className="mb-3">
+                    <p className="mb-2 text-center">
+                        Characters: {charCount}
+                    </p>
                     <input
                         type="text"
                         value={title}
@@ -63,7 +69,10 @@ const NoteForm = ({ addNote, darkMode }) => {
                         cols="100"
                         rows="10"
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) => {
+                            setContent(e.target.value);
+                            setCharCount(e.target.value.length);
+                        }}
                         placeholder="note content"
                         className="w-full p-2 border dark:bg-gray-700 dark:border-gray-400 rounded"
                     />
