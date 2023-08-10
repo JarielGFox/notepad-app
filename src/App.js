@@ -7,6 +7,8 @@ import importlogo from '../src/importlogo.png';
 
 
 const App = () => {
+  // errore per l'import delle note, da refactorare poi con custom hook
+  const [error, setError] = useState(null);
 
   // state per la darkmode nel localStorage
   const [darkMode, setDarkMode] = useState(() => {
@@ -118,14 +120,37 @@ const App = () => {
 
   //funzionalità di import delle note
   const handleImportNotes = (event) => {
-
     const file = event.target.files[0];
+
+    if (file) {
+      //l'oggetto FileReader() permette di leggere asincronamente il contenuto dei file sul PC dell'utente
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          //abbiamo accesso al contenuto del file tramite "e.target.result" che ci aspettiamo sia file JSON
+          const importedNotes = JSON.parse(e.target.result);
+          // controlliamo se le note importate sono un array
+          if (Array.isArray(importedNotes)) {
+            setNotes(importedNotes);
+            localStorage.setItem('notes', JSON.stringify(importedNotes));
+          } else {
+            throw new Error("Invalid file format");
+          }
+        } catch (error) {
+          throw new Error("Error parsing the imported file: " + error.message)
+        }
+      };
+      //inizia a leggere il file, appena finito si triggera l'evento onload sopra
+      reader.readAsText(file);
+    }
   };
 
-  // per cliccare l'elemento input nascosto
+  // per cliccare l'elemento input nascosto per l'import
   const triggerFileInput = () => {
     document.getElementById('fileInput').click();
   };
+
+
 
   // stato per funzionalità sort
   const [sortType, setSortType] = useState('creation');
@@ -174,8 +199,16 @@ const App = () => {
         />
       </div>
 
+      {error ?
+        <div className="bg-red-500 text-white p-2 rounded mt-2">
+          {error}
+          <button onClick={() => setError(null)} className="ml-2">X</button>
+        </div> : null
+      }
+
+
       <div>
-        <label for="sorting" className="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order your notes by:</label>
+        <label htmlFor="sorting" className="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order your notes by:</label>
         <select
           id="sorting"
           value={sortType}
