@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import DarkModeToggle from './components/DarkModeToggle';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
-import lightbulb from '../src/lightbulb.png';
 import exportlogo from '../src/exportlogo.png';
 import importlogo from '../src/importlogo.png';
-
 
 const App = () => {
   // errore per l'import delle note, da refactorare poi con custom hook
@@ -24,6 +23,13 @@ const App = () => {
       document.body.classList.remove('dark');
     }
   }, [darkMode]);
+
+  //attiviamo darkMode persistente nel localStorage
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
+  };
 
   // controlla se ci sono note salvate sotto la keyword notes nel localStorage
   // se ci sono parsa la stringa JSON in un array JS e lo usa come stato iniziale, sennò array vuoto
@@ -84,13 +90,6 @@ const App = () => {
     });
     setNotes(updatedNotes);
     localStorage.setItem('notes', JSON.stringify(updatedNotes));
-  };
-
-  //attiviamo darkMode persistente nel localStorage
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
   };
 
   // funzionalità per esportare le note
@@ -181,9 +180,7 @@ const App = () => {
       {/* don't repeat yourself tua madre */}
       <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
       <div className="flex items-center justify-center">
-        <button className="my-3 me-3 cursor-pointer" onClick={toggleDarkMode}>
-          <img src={lightbulb} width={40} height={40} alt="DarkMode" title="Dark Mode" />
-        </button>
+        <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <button className="my-3 me-3 cursor-pointer">
           <img src={importlogo} width={40} height={40} onClick={triggerFileInput} alt="Import Notes" title="Import Notes" />
         </button>
