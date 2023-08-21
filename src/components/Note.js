@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NoteDisplay from "./NoteDisplay";
+import NoteEdit from "./NoteEdit";
 
 // queste sono le props che passiamo al componente
 const Note = ({ note, deleteNote, editNote, darkMode }) => {
@@ -38,44 +39,21 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     }
 
     return isEditing ? (
-        <div className={`mt-1 flex items-center justify-center font-mono ${darkMode ? '' : 'bg-gray-100'}`}>
-            <form onSubmit={handleSubmit} className={`w-1/2 p-4 ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded shadow`}>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
-                    placeholder="Note Title"
-                />
-
-                <input
-                    type="text"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded`}
-                    placeholder="Note Category"
-                />
-
-                <textarea
-                    value={content}
-                    onChange={(e) => {
-                        setContent(e.target.value);
-                        setCharCount(e.target.value.length);
-                    }}
-                    className={`w-full text-center p-2 mb-4 border ${darkMode ? 'dark:border-gray-400 bg-gray-600' : ''} rounded`}
-                    placeholder="Note Content"
-                ></textarea>
-                <center>
-                    {errorMessage ? <p className="text-red-500 fw-700 my-3">{errorMessage}</p> : null}
-                </center>
-                <p className="mb-2 text-center">
-                    Characters: {charCount}
-                </p>
-                <div className="flex items-center justify-center">
-                    <button type="submit" className={`bg-blue-500 font-mono ${darkMode ? 'dark:bg-blue-300 dark:text-black' : 'text-white'} rounded`}>Update Note</button>
-                </div>
-            </form>
-        </div >
+        <NoteEdit
+            note={note}
+            onSave={handleSubmit}
+            onCancel={() => setIsEditing(false)}
+            title={title}
+            setTitle={setTitle}
+            content={content}
+            setContent={setContent}
+            category={category}
+            setCategory={setCategory}
+            charCount={charCount}
+            setCharCount={setCharCount}
+            errorMessage={errorMessage}
+            darkMode={darkMode}
+        />
     ) : (
         <NoteDisplay
             note={note}
