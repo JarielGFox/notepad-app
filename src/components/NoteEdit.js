@@ -1,6 +1,7 @@
 import React from "react";
+import ErrorDisplay from "./ErrorDisplay";
 
-const NoteEdit = ({ onSave, onCancel, title, setTitle, content, setContent, category, setCategory, charCount, setCharCount, errorMessage, darkMode }) => {
+const NoteEdit = ({ onSave, onCancel, title, setTitle, content, setContent, category, setCategory, charCount, setCharCount, error, darkMode }) => {
     return (
         <div className={`mt-1 flex items-center justify-center font-mono ${darkMode ? '' : 'bg-gray-100'}`}>
             <form onSubmit={onSave} className={`w-1/2 p-4 ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded shadow`}>
@@ -28,7 +29,7 @@ const NoteEdit = ({ onSave, onCancel, title, setTitle, content, setContent, cate
                     placeholder="Note Content"
                 ></textarea>
                 <center>
-                    {errorMessage ? <p className="text-red-500 fw-700 my-3">{errorMessage}</p> : null}
+                    <ErrorDisplay error={error} />
                 </center>
                 <p className="mb-2 text-center">
                     Characters: {charCount}

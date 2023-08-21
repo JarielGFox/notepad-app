@@ -1,4 +1,7 @@
 import { useState } from "react";
+//error management
+import useError from '../hooks/useError';
+// components management
 import NoteDisplay from "./NoteDisplay";
 import NoteEdit from "./NoteEdit";
 
@@ -15,8 +18,8 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
     // stato per il character counter
     const [charCount, setCharCount] = useState(0);
 
-    // gestisce l'errore nel caso la nota è vuota
-    const [errorMessage, setErrorMessage] = useState('');
+    // gestisce l'errore nel caso la nota è vuota (basandosi sul custom hook importato)
+    const [error, setErrorMessage, clearError] = useError();
 
     // stato per vedere le note espanse
     const [isExpanded, setIsExpanded] = useState(false);
@@ -31,7 +34,7 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
         }
 
         // se passa validazione reset del messaggio di errore
-        setErrorMessage('');
+        clearError();
 
         // aggiorna il contenuto delle note
         editNote(note.id, { title, content, category, id: note.id });
@@ -51,8 +54,8 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
             setCategory={setCategory}
             charCount={charCount}
             setCharCount={setCharCount}
-            errorMessage={errorMessage}
             darkMode={darkMode}
+            error={error}
         />
     ) : (
         <NoteDisplay

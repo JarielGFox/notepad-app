@@ -1,11 +1,13 @@
 import { useState } from "react"
+import ErrorDisplay from "./ErrorDisplay";
+import useError from "../hooks/useError";
 
 // passiamo addNote come prop
 const NoteForm = ({ addNote, darkMode }) => {
     // usiamo useState hook per creare variabili "title" e "content"
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [error, setErrorMessage, clearError] = useError();
     const [category, setCategory] = useState('');
 
     // stato per la conta dei caratteri
@@ -17,7 +19,6 @@ const NoteForm = ({ addNote, darkMode }) => {
         // previene aggiornamento della pagina della form submission
         e.preventDefault();
 
-
         // controlla se titolo e contenuto sono vuoti o solo spazi
         if (!title.trim() || !content.trim()) {
             setErrorMessage('Please fill in both the title and content.');
@@ -25,7 +26,7 @@ const NoteForm = ({ addNote, darkMode }) => {
         }
 
         // se la validazione passa resetta il messaggio di errore
-        setErrorMessage('');
+        clearError();
 
         // titolo e contenuto vengono impostati a stringhe vuote
         addNote(title, content, category);
@@ -80,7 +81,7 @@ const NoteForm = ({ addNote, darkMode }) => {
                     />
                 </div>
                 <center>
-                    {errorMessage ? <p className="text-red-400 fw-700 my-3">{errorMessage}</p> : null}
+                    <ErrorDisplay error={error} />
                 </center>
                 <div className="flex items-center justify-center">
                     <button

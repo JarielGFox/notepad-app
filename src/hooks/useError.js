@@ -14,7 +14,7 @@ const useError = () => {
         setError(null);
     }
 
-    // l'hook ritorna un array che contiene lo stato dell'errore e le due funzioni di cui sopra
+    //l'hook ritorna un array che contiene lo stato dell'errore e le due funzioni di cui sopra
     return [error, setErrorMessage, clearError];
 }
 
