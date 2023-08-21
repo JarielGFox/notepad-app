@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NoteDisplay from "./NoteDisplay";
 
 // queste sono le props che passiamo al componente
 const Note = ({ note, deleteNote, editNote, darkMode }) => {
@@ -76,26 +77,17 @@ const Note = ({ note, deleteNote, editNote, darkMode }) => {
             </form>
         </div >
     ) : (
-        <div className={`p-4 m-4 w-1/2 rounded shadow mx-auto font-mono ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}>
-            <h2 className="font-bold">{note.title}</h2>
-            {/* se isExpanded è true, mostra tutto il contenuto della nota, se false invece solo i primi 100 chars */}
-            <p onClick={() => setIsExpanded(!isExpanded)} className="mb-4 cursor-pointer">
-                {/* ritorniamo una nuova stringa con substring(), se nota è più lunga di 100 chars, mostra i puntini */}
-                {isExpanded ? note.content : note.content.substring(0, 100)}{note.content.length > 100 ? "..." : ""}
-            </p>
-            <p className={`text-sm my-3 ${darkMode ? 'text-gray-400' : 'bg-white text-black'}`} >Category: {note.category}</p>
-
-            {/* Mostriamo la data di creazione e l'ultima data di modifica */}
-
-            <p className={`text-sm ${darkMode ? 'text-teal-200' : 'bg-white text-black'}`}>Created At: {new Date(note.createdAt).toLocaleDateString()} {new Date(note.createdAt).toLocaleTimeString()}</p>
-            <p className={`text-sm ${darkMode ? 'text-teal-200' : 'bg-white text-black'}`}>Last Edited: {new Date(note.lastEditedAt).toLocaleDateString()} {new Date(note.lastEditedAt).toLocaleTimeString()}</p>
-
-            <button onClick={() => deleteNote(note.id)} className="mr-2 bg-rose-400 text-gray-800 rounded p-1">Delete</button>
-            <button onClick={() => {
+        <NoteDisplay
+            note={note}
+            onEdit={() => {
                 setIsEditing(true);
                 setCharCount(note.content.length);
-            }} className="bg-teal-400 text-gray-800 rounded p-1">Edit</button>
-        </div>
+            }}
+            onDelete={() => deleteNote(note.id)}
+            isExpanded={isExpanded}
+            toggleExpand={() => setIsExpanded(!isExpanded)}
+            darkMode={darkMode}
+        />
     );
 };
 
