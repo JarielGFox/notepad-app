@@ -81,7 +81,7 @@ const NoteForm = ({ addNote, darkMode }) => {
                     />
                 </div>
                 <center>
-                    <ErrorDisplay error={error} />
+                    <ErrorDisplay error={error} clearError={clearError} />
                 </center>
                 <div className="flex items-center justify-center">
                     <button

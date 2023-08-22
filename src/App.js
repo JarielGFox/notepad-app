@@ -5,13 +5,16 @@ import ExportNotes from "./utils/ExportNotes";
 import SortSelect from './components/SortSelect';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
+//error management
+import useError from "./hooks/useError";
+import ErrorDisplay from "./components/ErrorDisplay";
 // img bottoni
 import importlogo from '../src/importlogo.png';
 import exportlogo from '../src/exportlogo.png';
 
 const App = () => {
   // errore per l'import delle note, da refactorare poi con custom hook
-  const [error, setError] = useState(null);
+  const [error, setErrorMessage, clearError] = useError();
 
   // state per la darkmode nel localStorage
   const [darkMode, setDarkMode] = useState(() => {
@@ -113,8 +116,8 @@ const App = () => {
       <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
       <div className="flex items-center justify-center">
         <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <ImportNotes setNotes={setNotes} importlogo={importlogo} />
-        <ExportNotes notes={notes} exportlogo={exportlogo} />
+        <ImportNotes setNotes={setNotes} importlogo={importlogo} setErrorMessage={setErrorMessage} />
+        <ExportNotes notes={notes} exportlogo={exportlogo} setErrorMessage={setErrorMessage} />
       </div>
       {/* quando renderiamo SortSelect passiamo questa lista di props:
       - notes: lista di note
@@ -125,8 +128,7 @@ const App = () => {
 
       {error ?
         <div className="bg-red-500 text-white p-2 rounded mt-2">
-          {error}
-          <button onClick={() => setError(null)} className="ml-2">X</button>
+          <ErrorDisplay error={error} clearError={clearError} />
         </div> : null
       }
 
