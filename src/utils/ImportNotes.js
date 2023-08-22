@@ -9,6 +9,7 @@ const ImportNotes = ({ setNotes, importlogo }) => {
         if (file) {
             //l'oggetto FileReader() permette di leggere asincronamente il contenuto dei file sul PC dell'utente
             const reader = new FileReader();
+
             reader.onload = (e) => {
                 try {
                     //abbiamo accesso al contenuto del file tramite "e.target.result" che ci aspettiamo sia file JSON

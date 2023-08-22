@@ -9,6 +9,7 @@ const ExportNotes = ({ notes, exportlogo }) => {
         const blob = new Blob([notesJSON], { type: 'application/json' });
         //creiamo un URL per il Blob
         const urlBlob = URL.createObjectURL(blob);
+
         //creiamo un anchor temporaneo
         const tempA = document.createElement('a');
         tempA.href = urlBlob;

@@ -5,6 +5,7 @@ import ExportNotes from "./utils/ExportNotes";
 import SortSelect from './components/SortSelect';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
+// img bottoni
 import importlogo from '../src/importlogo.png';
 import exportlogo from '../src/exportlogo.png';
 
