@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import DarkModeToggle from './components/DarkModeToggle';
+import ImportNotes from "./utils/ImportNotes";
+import ExportNotes from "./utils/ExportNotes";
 import SortSelect from './components/SortSelect';
 import NoteForm from './components/NoteForm';
 import Note from "./components/Note";
-import exportlogo from '../src/exportlogo.png';
 import importlogo from '../src/importlogo.png';
+import exportlogo from '../src/exportlogo.png';
 
 const App = () => {
   // errore per l'import delle note, da refactorare poi con custom hook
@@ -93,63 +95,6 @@ const App = () => {
     localStorage.setItem('notes', JSON.stringify(updatedNotes));
   };
 
-  // funzionalità per esportare le note
-  const handleExportNotes = () => {
-    //convertiamo le note in JSON
-    const notesJSON = JSON.stringify(notes);
-
-    //creiamo un file di raw data Binary Large OBject dalla stringa JSON
-    const blob = new Blob([notesJSON], { type: 'application/json' });
-
-    //creiamo un URL per il Blob
-    const urlBlob = URL.createObjectURL(blob);
-
-    //creiamo un anchor temporaneo
-    const tempA = document.createElement('a')
-    tempA.href = urlBlob;
-    tempA.download = 'notes_backup.json'; //nome del file di download
-
-    //aggiungiamo l'anchor al documento, triggera un click per il download e poi lo rimuoviamo
-    document.body.appendChild(tempA);
-    tempA.click();
-    document.body.removeChild(tempA);
-
-    // puliamo revocando l'url del BLOB
-    URL.revokeObjectURL(urlBlob);
-  }
-
-  //funzionalità di import delle note
-  const handleImportNotes = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      //l'oggetto FileReader() permette di leggere asincronamente il contenuto dei file sul PC dell'utente
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          //abbiamo accesso al contenuto del file tramite "e.target.result" che ci aspettiamo sia file JSON
-          const importedNotes = JSON.parse(e.target.result);
-          // controlliamo se le note importate sono un array
-          if (Array.isArray(importedNotes)) {
-            setNotes(importedNotes);
-            localStorage.setItem('notes', JSON.stringify(importedNotes));
-          } else {
-            throw new Error("Invalid file format");
-          }
-        } catch (error) {
-          throw new Error("Error parsing the imported file: " + error.message)
-        }
-      };
-      //inizia a leggere il file, appena finito si triggera l'evento onload sopra
-      reader.readAsText(file);
-    }
-  };
-
-  // per cliccare l'elemento input nascosto per l'import
-  const triggerFileInput = () => {
-    document.getElementById('fileInput').click();
-  };
-
   // stato per funzionalità sort
   const [sortType, setSortType] = useState('creation');
 
@@ -159,27 +104,17 @@ const App = () => {
     setNotes(sortedNotes);
   };
 
+
+
   return (
     <div className={darkMode ? 'dark' : ''}>
       {/* don't repeat yourself tua madre */}
       <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
       <div className="flex items-center justify-center">
         <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <button className="my-3 me-3 cursor-pointer">
-          <img src={importlogo} width={40} height={40} onClick={triggerFileInput} alt="Import Notes" title="Import Notes" />
-        </button>
-        <button className="my-3 cursor-pointer" onClick={handleExportNotes}>
-          <img src={exportlogo} width={40} height={40} alt="Export Notes" title="Export Notes" />
-        </button>
-
-        <input
-          type="file"
-          id="fileInput"
-          className="hidden"
-          onChange={handleImportNotes}
-        />
+        <ImportNotes setNotes={setNotes} importlogo={importlogo} />
+        <ExportNotes notes={notes} exportlogo={exportlogo} />
       </div>
-
       {/* quando renderiamo SortSelect passiamo questa lista di props:
       - notes: lista di note
       - onSort: la funzione di callback che aggiorna lo stato delle note con quelle ordinate dall'utente
@@ -203,7 +138,5 @@ const App = () => {
       ))}
     </div>
   );
-
 };
-
 export default App;
