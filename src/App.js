@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DarkModeToggle from './components/DarkModeToggle';
 import ImportNotes from "./utils/ImportNotes";
 import ExportNotes from "./utils/ExportNotes";
@@ -8,35 +8,15 @@ import Note from "./components/Note";
 //error management
 import useError from "./hooks/useError";
 import ErrorDisplay from "./components/ErrorDisplay";
+//context
+import { DarkModeProvider } from './contexts/DarkModeContext';
 // img bottoni
 import importlogo from '../src/importlogo.png';
 import exportlogo from '../src/exportlogo.png';
 
 const App = () => {
-  // errore per l'import delle note, da refactorare poi con custom hook
+  // errore per l'import delle note, con custom hook
   const [error, setErrorMessage, clearError] = useError();
-
-  // state per la darkmode nel localStorage
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedDarkMode = localStorage.getItem('dark-mode');
-    return savedDarkMode ? JSON.parse(savedDarkMode) : false;
-  });
-
-  // useEffect per la darkMode
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-  }, [darkMode]);
-
-  //attiviamo darkMode persistente nel localStorage
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    localStorage.setItem('dark-mode', JSON.stringify(newDarkMode));
-  };
 
   // controlla se ci sono note salvate sotto la keyword notes nel localStorage
   // se ci sono parsa la stringa JSON in un array JS e lo usa come stato iniziale, sennò array vuoto
@@ -111,35 +91,37 @@ const App = () => {
 
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
-      {/* don't repeat yourself tua madre */}
-      <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
-      <div className="flex items-center justify-center">
-        <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <ImportNotes setNotes={setNotes} importlogo={importlogo} setErrorMessage={setErrorMessage} />
-        <ExportNotes notes={notes} exportlogo={exportlogo} setErrorMessage={setErrorMessage} />
-      </div>
-      {/* quando renderiamo SortSelect passiamo questa lista di props:
+    <DarkModeProvider>
+      <div className="dark-mode-wrapper">
+        {/* don't repeat yourself tua madre */}
+        <h1 className="mt-3 flex items-evenly justify-center font-bold text-black dark:text-white font-mono text-2xl">Reactive Notes</h1>
+        <div className="flex items-center justify-center">
+          <DarkModeToggle />
+          <ImportNotes setNotes={setNotes} importlogo={importlogo} setErrorMessage={setErrorMessage} />
+          <ExportNotes notes={notes} exportlogo={exportlogo} setErrorMessage={setErrorMessage} />
+        </div>
+        {/* quando renderiamo SortSelect passiamo questa lista di props:
       - notes: lista di note
       - onSort: la funzione di callback che aggiorna lo stato delle note con quelle ordinate dall'utente
       - sortType e setSortType: il metodo di sorting selezionato e la funzione che ne gestisce le logiche
       */}
-      <SortSelect notes={notes} onSort={updateSortedNotes} sortType={sortType} setSortType={setSortType} />
+        <SortSelect notes={notes} onSort={updateSortedNotes} sortType={sortType} setSortType={setSortType} />
 
-      {error ?
-        <div className="bg-red-500 text-white p-2 rounded mt-2">
-          <ErrorDisplay error={error} clearError={clearError} />
-        </div> : null
-      }
+        {error ?
+          <div className="bg-red-500 text-white p-2 rounded mt-2">
+            <ErrorDisplay error={error} clearError={clearError} />
+          </div> : null
+        }
 
-      {/* passiamo addNote come prop al componente NoteForm */}
-      <NoteForm addNote={addNote} darkMode={darkMode} />
-      {/* mappiamo notes e renderiamo un component Note per ogni nota mappata */}
-      {notes.map((note) => (
-        // passiamo note, deleteNote e editNote come prop al componente Note e usiamo l'id di note come chiave per il mapping
-        <Note key={note.id} note={note} deleteNote={deleteNote} editNote={editNote} darkMode={darkMode} />
-      ))}
-    </div>
+        {/* passiamo addNote come prop al componente NoteForm */}
+        <NoteForm addNote={addNote} />
+        {/* mappiamo notes e renderiamo un component Note per ogni nota mappata */}
+        {notes.map((note) => (
+          // passiamo note, deleteNote e editNote come prop al componente Note e usiamo l'id di note come chiave per il mapping
+          <Note key={note.id} note={note} deleteNote={deleteNote} editNote={editNote} />
+        ))}
+      </div>
+    </DarkModeProvider>
   );
 };
 export default App;

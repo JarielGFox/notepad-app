@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useDarkMode } from '../contexts/DarkModeContext';
 //error management
 import useError from '../hooks/useError';
 // components management
@@ -6,7 +7,9 @@ import NoteDisplay from "./NoteDisplay";
 import NoteEdit from "./NoteEdit";
 
 // queste sono le props che passiamo al componente
-const Note = ({ note, deleteNote, editNote, darkMode }) => {
+const Note = ({ note, deleteNote, editNote }) => {
+    //usiamo il custom hook della darkMode nel componente
+    const { darkMode } = useDarkMode();
 
     // stato per l'editing delle note
     const [isEditing, setIsEditing] = useState(false);

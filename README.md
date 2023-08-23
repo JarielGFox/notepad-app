@@ -6,7 +6,7 @@ This app will allow users to create, read, update, and delete notes. Here's a ba
 
 - Note Display: Once a note has been created, will be rendered in the browser.
 
-- Norte sorting: sort notes by alphabetical order or by last editing or creation date.
+- Note sorting: sort notes by alphabetical order or by last editing or creation date.
 
 - Options to edit or delete each note.
 

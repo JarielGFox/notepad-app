@@ -1,7 +1,10 @@
 import React from 'react';
+import { useDarkMode } from '../contexts/DarkModeContext';
 import lightbulb from '../lightbulb.png';
 
-const DarkModeToggle = ({ darkMode, toggleDarkMode }) => {
+const DarkModeToggle = () => {
+    const { toggleDarkMode } = useDarkMode(); // usa il context
+
     return (
         <div className="flex items-center justify-center">
             <button className="my-3 me-3 cursor-pointer" onClick={toggleDarkMode}>

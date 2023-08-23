@@ -1,14 +1,19 @@
-import { useState } from "react"
+import React, { useState } from "react"
+import { useDarkMode } from '../contexts/DarkModeContext';
 import ErrorDisplay from "./ErrorDisplay";
 import useError from "../hooks/useError";
 
 // passiamo addNote come prop
-const NoteForm = ({ addNote, darkMode }) => {
+const NoteForm = ({ addNote }) => {
+    // Usiamo il custom hook del componente DarkMode
+    const { darkMode } = useDarkMode();
+
     // usiamo useState hook per creare variabili "title" e "content"
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [error, setErrorMessage, clearError] = useError();
     const [category, setCategory] = useState('');
+
 
     // stato per la conta dei caratteri
     const [charCount, setCharCount] = useState(0);
